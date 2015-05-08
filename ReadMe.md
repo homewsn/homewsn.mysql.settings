@@ -16,7 +16,7 @@ Create a whsnbg user:
 ```sh
 mysql> CREATE USER 'whsnbg'@'%' IDENTIFIED BY 'some_pass';
 ```
-For more security, you can replace `%` with an IP address of the gateway where whsnbg program runs.
+For more security, you can replace `%` with an IP address of the gateway where [whsnbg](https://github.com/homewsn/whsnbg) program runs.
 Then provide the whsnbg user with the permissions:
 ```sh
 mysql> GRANT INSERT,SELECT,UPDATE ON homewsn.* TO ‘whsnbg’@'%’;
