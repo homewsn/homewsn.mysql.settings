@@ -14,7 +14,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -46,8 +46,8 @@ FROM(SELECT `value_avg`
 FROM `data_float_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -56,8 +56,8 @@ FROM(SELECT `value_min`
 FROM `data_float_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -66,13 +66,13 @@ FROM(SELECT `value_max`
 FROM `data_float_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_float_day` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_float_day` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -85,7 +85,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par, hour INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -120,8 +120,8 @@ FROM(SELECT `value`
 FROM `data_float`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -130,8 +130,8 @@ FROM(SELECT `value`
 FROM `data_float`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -140,13 +140,13 @@ FROM(SELECT `value`
 FROM `data_float`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_float_hour` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_float_hour` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -161,7 +161,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -193,8 +193,8 @@ FROM(SELECT `value_avg`
 FROM `data_float_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -203,8 +203,8 @@ FROM(SELECT `value_min`
 FROM `data_float_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -213,13 +213,13 @@ FROM(SELECT `value_max`
 FROM `data_float_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_float_month` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_float_month` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -232,7 +232,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -264,8 +264,8 @@ FROM(SELECT `value_avg`
 FROM `data_long_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -274,8 +274,8 @@ FROM(SELECT `value_min`
 FROM `data_long_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -284,13 +284,13 @@ FROM(SELECT `value_max`
 FROM `data_long_hour`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_long_day` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_long_day` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -303,7 +303,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par, hour INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -338,8 +338,8 @@ FROM(SELECT `value`
 FROM `data_long`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -348,8 +348,8 @@ FROM(SELECT `value`
 FROM `data_long`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -358,13 +358,13 @@ FROM(SELECT `value`
 FROM `data_long`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_long_hour` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_long_hour` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -379,7 +379,7 @@ BEGIN
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `sensor_id`, `sensor_param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -411,8 +411,8 @@ FROM(SELECT `value_avg`
 FROM `data_long_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @avg;
 
@@ -421,8 +421,8 @@ FROM(SELECT `value_min`
 FROM `data_long_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @min;
 
@@ -431,13 +431,13 @@ FROM(SELECT `value_max`
 FROM `data_long_day`
 WHERE `time` >= beg
 AND `time` <= end
-AND `sensor_id` = idd
-AND `sensor_param` = par)
+AND `id` = idd
+AND `param` = par)
 AS temp
 INTO @max;
 
 IF (@avg IS NOT NULL) THEN
- INSERT INTO `data_long_month` (`sensor_id`, `sensor_param`, `time`, `value_avg`, `value_min`, `value_max`)
+ INSERT INTO `data_long_month` (`id`, `param`, `time`, `value_avg`, `value_min`, `value_max`)
  VALUES (idd, par, beg, @avg, @min, @max)
  ON DUPLICATE KEY UPDATE value_avg=@avg, value_min=@min, value_max=@max;
 END IF;
@@ -446,135 +446,151 @@ END$$
 
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `actuators` (
+  `id` int(4) unsigned NOT NULL,
+  `location` varchar(128) NOT NULL,
+  `ip` char(15) CHARACTER SET ascii NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `data_float` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value` float NOT NULL,
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`),
-  KEY `time` (`sensor_id`,`sensor_param`,`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`),
+  KEY `time` (`id`,`param`,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_float_day` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` float NOT NULL,
   `value_max` float NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_float_hour` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` float NOT NULL,
   `value_max` float NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_float_month` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` float NOT NULL,
   `value_max` float NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_long` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value` int(4) NOT NULL,
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`),
-  KEY `time` (`sensor_id`,`sensor_param`,`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`),
+  KEY `time` (`id`,`param`,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_long_day` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` int(4) NOT NULL,
   `value_max` int(4) NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_long_hour` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` int(4) NOT NULL,
   `value_max` int(4) NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_long_month` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value_avg` float NOT NULL,
   `value_min` int(4) NOT NULL,
   `value_max` int(4) NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`,`time`),
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`param`,`time`),
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `data_ut8str` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `data_utf8str` (
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
   `time` datetime NOT NULL,
   `value` varchar(73) NOT NULL,
-  KEY `id` (`sensor_id`),
-  KEY `parameter` (`sensor_id`,`sensor_param`),
-  KEY `time` (`sensor_id`,`sensor_param`,`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `id` (`id`),
+  KEY `parameter` (`id`,`param`),
+  KEY `time` (`id`,`param`,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `parameters` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `sensor_param` int(4) unsigned NOT NULL,
-  `unit` varchar(32) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`sensor_id`,`sensor_param`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
+  `unit` varchar(32) NOT NULL,
+  `data_type` varchar(8) NOT NULL,
+  `icon_type` varchar(32) NOT NULL DEFAULT '',
+  `icon_url_na` varchar(128) NOT NULL DEFAULT '',
+  `icon_url_0` varchar(128) NOT NULL DEFAULT '',
+  `icon_url_1` varchar(128) NOT NULL DEFAULT '',
+  `value_0` varchar(32) NOT NULL DEFAULT '',
+  `value_1` varchar(32) NOT NULL DEFAULT '',
+  `type` varchar(32) NOT NULL DEFAULT '',
+  `comment` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`,`param`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `sensors` (
-  `sensor_id` int(4) unsigned NOT NULL,
-  `st_duration` int(4) unsigned NOT NULL,
-  `location` varchar(128) CHARACTER SET utf8 NOT NULL,
-  `sensor_ip` char(15) CHARACTER SET ascii NOT NULL,
-  PRIMARY KEY (`sensor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id` int(4) unsigned NOT NULL,
+  `st_duration` int(4) unsigned NOT NULL DEFAULT '0',
+  `location` varchar(128) NOT NULL,
+  `ip` char(15) CHARACTER SET ascii NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-04-01 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_float_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-03-31 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-14 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_long_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-14 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_long_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-03-31 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-14 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_float_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-14 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_float_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-04-01 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_long_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
 
 DELIMITER ;
 
