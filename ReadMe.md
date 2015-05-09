@@ -32,7 +32,7 @@ mysql> ALTER EVENT calc_data_long_day_for_yesterday ENABLE;
 mysql> ALTER EVENT calc_data_long_hour_for_yesterday ENABLE;
 mysql> ALTER EVENT calc_data_long_month_for_last_month ENABLE;
 ```
-Finally edit MySQL section in the whsnbg.conf file, for example:
+Finally edit MySQL section in the [whsnbg.conf](https://github.com/homewsn/whsnbg/blob/master/whsnbg.sample.conf) file, for example:
 ```sh
 # MySQL section (remote MySQL database)
 mysql_enable = 1
