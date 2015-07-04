@@ -47,12 +47,8 @@ Then restart the MySQL server.
 
 Please be sure all events in the homewsn database are enabled. If not, enable them:
 ```sh
-mysql> ALTER EVENT calc_data_float_day_for_yesterday ENABLE;
-mysql> ALTER EVENT calc_data_float_hour_for_yesterday ENABLE;
-mysql> ALTER EVENT calc_data_float_month_for_last_month ENABLE;
-mysql> ALTER EVENT calc_data_long_day_for_yesterday ENABLE;
-mysql> ALTER EVENT calc_data_long_hour_for_yesterday ENABLE;
-mysql> ALTER EVENT calc_data_long_month_for_last_month ENABLE;
+mysql> ALTER EVENT calc_data_for_yesterday ENABLE;
+mysql> ALTER EVENT calc_data_for_last_month ENABLE;
 ```
 
 Edit MySQL section in the [whsnbg.conf](https://github.com/homewsn/whsnbg/blob/master/res/whsnbg.conf) file, for example:
@@ -67,7 +63,7 @@ mysql_port = 3306
 ```
 
 Finally edit [mysql.inc](https://github.com/homewsn/homewsn.webui/blob/master/mysql.inc) file, for example:
-```sh
+```php
 <?php
 $host = "192.168.0.213";
 $user = "webui";
