@@ -26,7 +26,7 @@ mysql> CREATE USER 'whsnbg'@'%' IDENTIFIED BY 'some_pass';
 For more security, you can replace `%` with an IP address of the gateway where whsnbg runs.
 Then provide the whsnbg user with the permissions:
 ```sh
-mysql> GRANT INSERT,SELECT,UPDATE ON homewsn.* TO ‘whsnbg’@'%’;
+mysql> GRANT INSERT,SELECT,UPDATE ON homewsn.* TO 'whsnbg'@'%';
 ```
 
 Create a webui user for [WebUI](https://github.com/homewsn/homewsn.webui):
@@ -36,7 +36,7 @@ mysql> CREATE USER 'webui'@'%' IDENTIFIED BY 'some_pass';
 For more security, you can replace `%` with an IP address of the web server where php scripts will be run.
 Then provide the webui user with the permissions:
 ```sh
-mysql> GRANT SELECT,UPDATE ON homewsn.* TO ‘webui’@'%’;
+mysql> GRANT SELECT,UPDATE ON homewsn.* TO 'webui'@'%';
 ```
 
 MySQL events are needed to run procedures to calculate average sensors data values for a hour, day and month. 
@@ -55,7 +55,7 @@ mysql> ALTER EVENT calc_data_long_hour_for_yesterday ENABLE;
 mysql> ALTER EVENT calc_data_long_month_for_last_month ENABLE;
 ```
 
-Edit MySQL section in the [whsnbg.conf](https://github.com/homewsn/whsnbg/blob/master/whsnbg.sample.conf) file, for example:
+Edit MySQL section in the [whsnbg.conf](https://github.com/homewsn/whsnbg/blob/master/res/whsnbg.conf) file, for example:
 ```sh
 # MySQL section (remote MySQL database)
 mysql_enable = 1

@@ -8,13 +8,13 @@ SET time_zone = "+00:00";
 
 
 DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_day_for_date`(IN `date` DATE)
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_float_day_for_date`(IN `date` DATE)
 BEGIN
 
 DECLARE done BOOLEAN DEFAULT FALSE;
 DECLARE beg DATETIME;
 DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 OPEN cur;
@@ -33,10 +33,139 @@ CLOSE cur;
   
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_day_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_float_hour_for_date`(IN `date` DATE)
 BEGIN
 
-#beg is the beginning of the day in the DATETIME format like '2013-12-20 00:00:00'
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par, hour INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  SET hour = 0;
+  WHILE hour < 24 DO
+    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
+    CALL calc_data_float_hour_for_id_par_beg(idd, par, beg);
+    SET hour = hour + 1;
+  END WHILE;
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_float_month_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_float_month_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_long_day_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_long_day_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_long_hour_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par, hour INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  SET hour = 0;
+  WHILE hour < 24 DO
+    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
+    CALL calc_data_long_hour_for_id_par_beg(idd, par, beg);
+    SET hour = hour + 1;
+  END WHILE;
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `actuators_data_long_month_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `actuators_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_long_month_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_day_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
+BEGIN
 
 DECLARE end DATETIME;
 SET end = DATE_ADD(beg, INTERVAL 86399 SECOND);
@@ -79,38 +208,8 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_hour_for_date`(IN `date` DATE)
-BEGIN
-
-DECLARE done BOOLEAN DEFAULT FALSE;
-DECLARE beg DATETIME;
-DECLARE idd, par, hour INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-OPEN cur;
-
-mainLoop: LOOP
-  FETCH cur INTO idd, par;
-  IF done THEN
-    LEAVE mainLoop;
-  END IF;
-  SET hour = 0;
-  WHILE hour < 24 DO
-    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
-    CALL calc_data_float_hour_for_id_par_beg(idd, par, beg);
-    SET hour = hour + 1;
-  END WHILE;
-END LOOP mainLoop;
-
-CLOSE cur;
-  
-END$$
-
 CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_hour_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
 BEGIN
-
-#beg is the beginning of the hour in the DATETIME format like '2013-12-20 04:00:00'
 
 DECLARE end DATETIME;
 SET end = DATE_ADD(beg, INTERVAL 3599 SECOND);
@@ -153,37 +252,8 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_month_for_date`(IN `date` DATE)
-BEGIN
-
-#date is the beginning of the month in the DATE format like '2013-12-01'
-
-DECLARE done BOOLEAN DEFAULT FALSE;
-DECLARE beg DATETIME;
-DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-OPEN cur;
-
-SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
-
-mainLoop: LOOP
-  FETCH cur INTO idd, par;
-  IF done THEN
-    LEAVE mainLoop;
-  END IF;
-  CALL calc_data_float_month_for_id_par_beg(idd, par, beg);
-END LOOP mainLoop;
-
-CLOSE cur;
-  
-END$$
-
 CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_float_month_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
 BEGIN
-
-#beg is the beginning of the month in the DATETIME format like '2013-12-01 00:00:00'
 
 DECLARE end DATETIME;
 SET end = TIMESTAMP(LAST_DAY(beg), MAKETIME(23, 59, 59));
@@ -226,35 +296,22 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_day_for_date`(IN `date` DATE)
+CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_for_date`(IN `date` DATE)
 BEGIN
 
-DECLARE done BOOLEAN DEFAULT FALSE;
-DECLARE beg DATETIME;
-DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+CALL actuators_data_float_hour_for_date(date);
+CALL actuators_data_long_hour_for_date(date);
+CALL sensors_data_float_hour_for_date(date);
+CALL sensors_data_long_hour_for_date(date);
+CALL actuators_data_float_day_for_date(date);
+CALL actuators_data_long_day_for_date(date);
+CALL sensors_data_float_day_for_date(date);
+CALL sensors_data_long_day_for_date(date);
 
-OPEN cur;
-
-SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
-
-mainLoop: LOOP
-  FETCH cur INTO idd, par;
-  IF done THEN
-    LEAVE mainLoop;
-  END IF;
-  CALL calc_data_long_day_for_id_par_beg(idd, par, beg);
-END LOOP mainLoop;
-
-CLOSE cur;
-  
 END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_day_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
 BEGIN
-
-#beg is the beginning of the day in the DATETIME format like '2013-12-20 00:00:00'
 
 DECLARE end DATETIME;
 SET end = DATE_ADD(beg, INTERVAL 86399 SECOND);
@@ -297,38 +354,8 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_hour_for_date`(IN `date` DATE)
-BEGIN
-
-DECLARE done BOOLEAN DEFAULT FALSE;
-DECLARE beg DATETIME;
-DECLARE idd, par, hour INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-OPEN cur;
-
-mainLoop: LOOP
-  FETCH cur INTO idd, par;
-  IF done THEN
-    LEAVE mainLoop;
-  END IF;
-  SET hour = 0;
-  WHILE hour < 24 DO
-    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
-    CALL calc_data_long_hour_for_id_par_beg(idd, par, beg);
-    SET hour = hour + 1;
-  END WHILE;
-END LOOP mainLoop;
-
-CLOSE cur;
-  
-END$$
-
 CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_hour_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
 BEGIN
-
-#beg is the beginning of the hour in the DATETIME format like '2013-12-20 04:00:00'
 
 DECLARE end DATETIME;
 SET end = DATE_ADD(beg, INTERVAL 3599 SECOND);
@@ -371,37 +398,8 @@ END IF;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_month_for_date`(IN `date` DATE)
-BEGIN
-
-#date is the beginning of the month in the DATE format like '2013-12-01'
-
-DECLARE done BOOLEAN DEFAULT FALSE;
-DECLARE beg DATETIME;
-DECLARE idd, par INT UNSIGNED;
-DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `parameters`;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-OPEN cur;
-
-SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
-
-mainLoop: LOOP
-  FETCH cur INTO idd, par;
-  IF done THEN
-    LEAVE mainLoop;
-  END IF;
-  CALL calc_data_long_month_for_id_par_beg(idd, par, beg);
-END LOOP mainLoop;
-
-CLOSE cur;
-  
-END$$
-
 CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_long_month_for_id_par_beg`(IN `idd` INT(4) UNSIGNED, IN `par` INT(4) UNSIGNED, IN `beg` DATETIME)
 BEGIN
-
-#beg is the beginning of the month in the DATETIME format like '2013-12-01 00:00:00'
 
 DECLARE end DATETIME;
 SET end = TIMESTAMP(LAST_DAY(beg), MAKETIME(23, 59, 59));
@@ -444,13 +442,195 @@ END IF;
 
 END$$
 
+CREATE DEFINER=`root`@`%` PROCEDURE `calc_data_month_for_date`(IN `date` DATE)
+BEGIN
+
+CALL actuators_data_float_month_for_date(date);
+CALL actuators_data_long_month_for_date(date);
+CALL sensors_data_float_month_for_date(date);
+CALL sensors_data_long_month_for_date(date);
+
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_float_day_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_float_day_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_float_hour_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par, hour INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  SET hour = 0;
+  WHILE hour < 24 DO
+    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
+    CALL calc_data_float_hour_for_id_par_beg(idd, par, beg);
+    SET hour = hour + 1;
+  END WHILE;
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_float_month_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_float_month_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_long_day_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_long_day_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_long_hour_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par, hour INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  SET hour = 0;
+  WHILE hour < 24 DO
+    SET beg = TIMESTAMP(date, MAKETIME(hour, 0, 0));
+    CALL calc_data_long_hour_for_id_par_beg(idd, par, beg);
+    SET hour = hour + 1;
+  END WHILE;
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `sensors_data_long_month_for_date`(IN `date` DATE)
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT FALSE;
+DECLARE beg DATETIME;
+DECLARE idd, par INT UNSIGNED;
+DECLARE cur CURSOR FOR SELECT `id`, `param` FROM `sensors_parameters`;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN cur;
+
+SET beg = TIMESTAMP(date, MAKETIME(0, 0, 0));
+
+mainLoop: LOOP
+  FETCH cur INTO idd, par;
+  IF done THEN
+    LEAVE mainLoop;
+  END IF;
+  CALL calc_data_long_month_for_id_par_beg(idd, par, beg);
+END LOOP mainLoop;
+
+CLOSE cur;
+  
+END$$
+
 DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `actuators` (
   `id` int(4) unsigned NOT NULL,
-  `location` varchar(128) NOT NULL,
+  `location` varchar(128) NOT NULL DEFAULT '',
   `ip` char(15) CHARACTER SET ascii NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `actuators_parameters` (
+  `id` int(4) unsigned NOT NULL,
+  `param` int(4) unsigned NOT NULL,
+  `unit` varchar(32) NOT NULL DEFAULT '',
+  `data_type` varchar(8) NOT NULL DEFAULT '',
+  `icon_type` varchar(32) NOT NULL DEFAULT '',
+  `icon_url_na` varchar(128) NOT NULL DEFAULT '',
+  `icon_url_0` varchar(128) NOT NULL DEFAULT '',
+  `icon_url_1` varchar(128) NOT NULL DEFAULT '',
+  `value_0` varchar(32) NOT NULL DEFAULT '',
+  `value_1` varchar(32) NOT NULL DEFAULT '',
+  `type` varchar(32) NOT NULL DEFAULT '',
+  `comment` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`,`param`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `data_float` (
@@ -555,11 +735,19 @@ CREATE TABLE IF NOT EXISTS `data_utf8str` (
   KEY `time` (`id`,`param`,`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `parameters` (
+CREATE TABLE IF NOT EXISTS `sensors` (
+  `id` int(4) unsigned NOT NULL,
+  `st_duration` int(4) unsigned NOT NULL DEFAULT '0',
+  `location` varchar(128) NOT NULL DEFAULT '',
+  `ip` char(15) CHARACTER SET ascii NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `sensors_parameters` (
   `id` int(4) unsigned NOT NULL,
   `param` int(4) unsigned NOT NULL,
-  `unit` varchar(32) NOT NULL,
-  `data_type` varchar(8) NOT NULL,
+  `unit` varchar(32) NOT NULL DEFAULT '',
+  `data_type` varchar(8) NOT NULL DEFAULT '',
   `icon_type` varchar(32) NOT NULL DEFAULT '',
   `icon_url_na` varchar(128) NOT NULL DEFAULT '',
   `icon_url_0` varchar(128) NOT NULL DEFAULT '',
@@ -571,26 +759,10 @@ CREATE TABLE IF NOT EXISTS `parameters` (
   PRIMARY KEY (`id`,`param`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `sensors` (
-  `id` int(4) unsigned NOT NULL,
-  `st_duration` int(4) unsigned NOT NULL DEFAULT '0',
-  `location` varchar(128) NOT NULL,
-  `ip` char(15) CHARACTER SET ascii NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 DELIMITER $$
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-03-31 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2015-07-01 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
 
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
-
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_month_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2014-03-31 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
-
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
-
-CREATE DEFINER=`root`@`%` EVENT `calc_data_float_day_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:10:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_float_day_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
-
-CREATE DEFINER=`root`@`%` EVENT `calc_data_long_hour_for_yesterday` ON SCHEDULE EVERY 1 DAY STARTS '2014-03-13 00:05:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_long_hour_for_date(DATE_ADD(CURDATE(), INTERVAL -1 DAY))$$
+CREATE DEFINER=`root`@`%` EVENT `calc_data_for_last_month` ON SCHEDULE EVERY 1 MONTH STARTS '2015-07-01 00:15:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL calc_data_month_for_date(DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY))$$
 
 DELIMITER ;
 
